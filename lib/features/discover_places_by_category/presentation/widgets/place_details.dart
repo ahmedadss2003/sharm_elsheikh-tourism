@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:tourist_website/core/widgets/similar_and_most_popular_card.dart';
 
 
-class TourismHomePage extends StatefulWidget {
+class PLaceDetailsView extends StatefulWidget {
+  const PLaceDetailsView({super.key});
+  static const String routeName = 'place_details_view';
   @override
-  _TourismHomePageState createState() => _TourismHomePageState();
+  // ignore: library_private_types_in_public_api
+  _PLaceDetailsViewState createState() => _PLaceDetailsViewState();
 }
 
-class _TourismHomePageState extends State<TourismHomePage> {
+class _PLaceDetailsViewState extends State<PLaceDetailsView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   DateTime? selectedDate;
   int adults = 1;
@@ -123,18 +127,7 @@ class _TourismHomePageState extends State<TourismHomePage> {
                 ),
               ),
               SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildInfoChip(Icons.access_time, 'Duration'),
-                  SizedBox(width: 20),
-                  _buildInfoChip(Icons.group, 'Group Size'),
-                  SizedBox(width: 20),
-                  _buildInfoChip(Icons.calendar_today, 'Daily'),
-                  SizedBox(width: 20),
-                  _buildInfoChip(Icons.person, 'Guide'),
-                ],
-              ),
+              
             ],
           ),
         ),
@@ -152,6 +145,7 @@ class _TourismHomePageState extends State<TourismHomePage> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
+          
           Icon(icon, color: Colors.white, size: 16),
           SizedBox(width: 5),
           Text(
@@ -191,6 +185,7 @@ class _TourismHomePageState extends State<TourismHomePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        
         Text(
           'Swimming with dolphins in Sharm el Sheikh is an unique experience that shows of Dolphin World at Sharm el Sheikh Dolphins World, a part of the culture of excellence. We will be transported with these intelligent creatures which give you hope, swim with and observe at close hand.',
           style: TextStyle(fontSize: 16, height: 1.6),
@@ -527,95 +522,8 @@ class _TourismHomePageState extends State<TourismHomePage> {
             ),
             itemCount: 4,
             itemBuilder: (context, index) {
-              return _buildTourCard(index);
+              return SimilarAndMostPopularCard(index: index);
             },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTourCard(int index) {
-    List<String> tourImages = [
-      'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60',
-      'https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60',
-      'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60',
-      'https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60',
-    ];
-
-    List<String> tourTitles = [
-      'Ras Mohamed National Park Day Tour',
-      'Blue Lagoon',
-      'Snorkeling Catamarans in Blue Hole',
-      'Quad bike desert safari',
-    ];
-
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 3,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
-                image: DecorationImage(
-                  image: NetworkImage(tourImages[index]),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    tourTitles[index],
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Spacer(),
-                  Row(
-                    children: List.generate(5, (starIndex) {
-                      return Icon(
-                        Icons.star,
-                        color: starIndex < 4 ? Colors.amber : Colors.grey[300],
-                        size: 16,
-                      );
-                    }),
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    'From \$${(50 + index * 25)}',
-                    style: TextStyle(
-                      color: Colors.blue[800],
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ),
         ],
       ),

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:tourist_website/core/models/images_model.dart';
 import 'package:tourist_website/features/home/presentation/widgets/cursor_slider.dart';
 import 'package:tourist_website/features/home/presentation/widgets/footer_section.dart';
+import 'package:tourist_website/features/home/presentation/widgets/most_popular_grid_view.dart';
 import 'package:tourist_website/features/home/presentation/widgets/svg_icon.dart';
 import 'package:tourist_website/features/home/presentation/widgets/type_tour_card.dart';
-import 'package:tourist_website/features/home/presentation/widgets/video_section.dart';
+import 'package:tourist_website/features/home/presentation/widgets/wow_booking_section.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,7 +15,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // ScrollController to control the scrolling behavior
   final ScrollController _scrollController = ScrollController();
   final GlobalKey _footerKey = GlobalKey();
 
@@ -111,68 +111,81 @@ class _HomePageState extends State<HomePage> {
             physics: const BouncingScrollPhysics(
               decelerationRate: ScrollDecelerationRate.fast,
             ),
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: constraints.maxWidth > 960 ? 30 : 16,
-                vertical: 16,
-              ),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: double.infinity),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CustomCarouselSlider(cities: lst),
-                    const SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 26),
-                      child: Column(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: double.infinity),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                    horizontal: constraints.maxWidth > 960 ? 30 : 16,
+                    vertical: 16,
+                  ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CustomCarouselSlider(cities: lst),
+                        const SizedBox(height: 20),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 26),
+                          child: Column(
+                            
+                            children: [
+                              const Text(
+                                'Sharm El Sheikh Excursions & Tours & Best Things To Do',
+                                style: TextStyle(
+                                  color: Color(0xFF101518),
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w900,
+                                  // letterSpacing: -0.33,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              const Text(
+                                "Explore Sharm el Sheikh and Egypt with Vova Tours. We are here to present you with a wide variety of excursions to and from sharm el sheikh, such as overday trips to Cairo, Luxor, Alexandria, Jerusalem, petra, quad biking, Dolphin show, Swimming with the dolphins",
+                                style: TextStyle(
+                                  color: Color(0xFF8D9199),
+                                  fontSize: 15 ,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: tours.length,
+                                itemBuilder: (context, index) {
+                                  final tour = tours[index];
+                                  return TourCard(
+                                    category: tour['category']!,
+                                    title: tour['title']!,
+                                    description: tour['description']!,
+                                    imageUrl: tour['imageUrl']!,
+                                  );
+                                },
+                              ),
+                              
+                             
+                             SizedBox(height: 20,),
+                             Text("Most popular Trips" , style: TextStyle(fontSize: 26 , fontWeight: FontWeight.w600),) ,
+                             SizedBox(height: 8,),
+                             Text("Discover our most popular excursions" , style: TextStyle(fontSize: 12 , fontWeight: FontWeight.w500 , color: Color(0xFF8D9199)),) ,
+                             SizedBox(height: 12,),
+                             MostPopularGridView(),
+                            ],
+                          ),
+                        ),
                         
-                        children: [
-                          const Text(
-                            'Sharm El Sheikh Excursions & Tours & Best Things To Do',
-                            style: TextStyle(
-                              color: Color(0xFF101518),
-                              fontSize: 24,
-                              fontWeight: FontWeight.w900,
-                              // letterSpacing: -0.33,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          const Text(
-                            "Explore Sharm el Sheikh and Egypt with Vova Tours. We are here to present you with a wide variety of excursions to and from sharm el sheikh, such as overday trips to Cairo, Luxor, Alexandria, Jerusalem, petra, quad biking, Dolphin show, Swimming with the dolphins",
-                            style: TextStyle(
-                              color: Color(0xFF8D9199),
-                              fontSize: 15 ,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: tours.length,
-                            itemBuilder: (context, index) {
-                              final tour = tours[index];
-                              return TourCard(
-                                category: tour['category']!,
-                                title: tour['title']!,
-                                description: tour['description']!,
-                                imageUrl: tour['imageUrl']!,
-                              );
-                            },
-                          ),
-                          const VideoSection(),
-                          const SizedBox(height: 20),
-                          // Attach GlobalKey to FooterSection
-                          KeyedSubtree(
-                            key: _footerKey,
-                            child: const FooterSection(),
-                          ),
-                        ],
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
+                  const SizedBox(height: 20),
+                  HowBookingSection() ,
+                  const SizedBox(height: 20),
+                  KeyedSubtree(
+                  key: _footerKey,
+                  child: const FooterSection(),
                 ),
+                ],
               ),
             ),
           );

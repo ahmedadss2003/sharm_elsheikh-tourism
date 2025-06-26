@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -7,43 +6,56 @@ class FooterSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Wrap(
-          alignment: WrapAlignment.center,
-          spacing: 24,
-          runSpacing: 12,
-          children: [
-            FooterLink(text: 'About Us', url: '#'),
-            FooterLink(text: 'Contact', url: '#'),
-            FooterLink(text: 'Language', url: '#'),
-            
-          ],
-        ),
-        const SizedBox(height: 16),
-        Wrap(
-          alignment: WrapAlignment.center,
-          spacing: 16,
-          children: [
-            SocialIcon(icon: Icons.facebook, url: 'https://www.facebook.com/SharmElSheikhTourism'),
-            SocialIcon(icon: Icons.alternate_email, url: 'https://twitter.com/SharmTourism'),
-            SocialIcon(icon: Icons.camera_alt, url: 'https://www.instagram.com/sharmelsheikhtourism'),
-          ],
-        ),
-        const SizedBox(height: 16),
-        Text(
-          '© 2025 Sharm El-Sheikh Tourism. All rights reserved.',
-          style: TextStyle(
-            color: const Color(0xFF5C748A),
-            fontSize: 14,
+    return Container(
+      width: double.infinity,
+      color: const Color(0xFF1A1A1A), // dark footer background
+      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Top Navigation Links
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 32,
+            runSpacing: 12,
+            children: [
+              FooterLink(text: 'About Us', url: '#'),
+              FooterLink(text: 'Contact', url: '#'),
+              FooterLink(text: 'Terms', url: '#'),
+              FooterLink(text: 'Privacy', url: '#'),
+              FooterLink(text: 'Language', url: '#'),
+            ],
           ),
-        ),
-      ],
+
+          const SizedBox(height: 24),
+
+          // Social Media Icons
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 24,
+            children: [
+              SocialIcon(icon: Icons.facebook, url: 'https://www.facebook.com/SharmElSheikhTourism'),
+              SocialIcon(icon: Icons.alternate_email, url: 'https://twitter.com/SharmTourism'),
+              SocialIcon(icon: Icons.camera_alt, url: 'https://www.instagram.com/sharmelsheikhtourism'),
+            ],
+          ),
+
+          const SizedBox(height: 24),
+
+          // Bottom Text
+          Text(
+            '© 2025 Sharm El-Sheikh Tourism. All rights reserved.',
+            style: TextStyle(
+              color: Colors.grey.shade400,
+              fontSize: 14,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 }
-
 
 class FooterLink extends StatelessWidget {
   final String text;
@@ -53,13 +65,18 @@ class FooterLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () => _launchUrl(url),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: const Color(0xFF5C748A),
-          fontSize: 16,
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () => _launchUrl(url),
+        child: Text(
+          text,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            decoration: TextDecoration.underline,
+          ),
         ),
       ),
     );
@@ -74,9 +91,13 @@ class SocialIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(icon, color: const Color(0xFF5C748A), size: 24),
-      onPressed: () => _launchUrl(url),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: IconButton(
+        icon: Icon(icon, color: Colors.white, size: 28),
+        onPressed: () => _launchUrl(url),
+        tooltip: url,
+      ),
     );
   }
 }
@@ -85,7 +106,5 @@ Future<void> _launchUrl(String url) async {
   final Uri uri = Uri.parse(url);
   if (await canLaunchUrl(uri)) {
     await launchUrl(uri);
-  } else {
-    // Handle error, e.g., show a snackbar
   }
 }
