@@ -170,7 +170,7 @@ class _HomePageState extends State<HomePage> {
                              SizedBox(height: 8,),
                              Text("Discover our most popular excursions" , style: TextStyle(fontSize: 12 , fontWeight: FontWeight.w500 , color: Color(0xFF8D9199)),) ,
                              SizedBox(height: 12,),
-                             MostPopularGridView(),
+                             CustomMostPopularGridView(),
                             ],
                           ),
                         ),

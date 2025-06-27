@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tourist_website/core/widgets/similar_and_most_popular_card.dart';
 
-class CustomMostPopularGridView extends StatelessWidget {
-  const CustomMostPopularGridView({super.key});
-
+class CustomDiscoverPlacesGridView extends StatelessWidget {
+  const CustomDiscoverPlacesGridView({super.key, this.child});
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +21,7 @@ class CustomMostPopularGridView extends StatelessWidget {
               ),
               itemCount: 10,
               itemBuilder: (context, index) {
-                return SimilarAndMostPopularCard(index: index);
+                return child;
               },
             );
           }

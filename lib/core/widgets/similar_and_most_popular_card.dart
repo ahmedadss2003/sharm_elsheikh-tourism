@@ -50,7 +50,7 @@ class SimilarAndMostPopularCard extends StatelessWidget {
       builder: (context , constrains){
         return GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, PLaceDetailsView.routeName) ;
+            Navigator.pushNamed(context, PlaceDetailsView.routeName) ;
           },
           child: Container(
             width: constrains.maxWidth,

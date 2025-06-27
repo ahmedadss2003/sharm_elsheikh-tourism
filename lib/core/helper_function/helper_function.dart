@@ -11,8 +11,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => const HomePage());
     case DiscoverPlacesView.routeName:
       return MaterialPageRoute(builder: (_) => const DiscoverPlacesView());
-    case PLaceDetailsView.routeName:
-      return MaterialPageRoute(builder: (_) => const PLaceDetailsView());
+    case PlaceDetailsView.routeName:
+      return MaterialPageRoute(builder: (_) => const PlaceDetailsView());
     
     default:
       return MaterialPageRoute(builder: (_) => const Scaffold());
