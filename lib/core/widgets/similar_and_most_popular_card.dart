@@ -103,8 +103,8 @@ class SimilarAndMostPopularCard extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Spacer(),
-                        Row(
+                        SizedBox(height: 10,)
+                        ,Row(
                           children: List.generate(5, (index) {
                             return Icon(
                               Icons.star,

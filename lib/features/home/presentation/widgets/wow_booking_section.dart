@@ -1,5 +1,5 @@
 
-
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class HowBookingSection extends StatelessWidget {
@@ -14,6 +14,7 @@ class HowBookingSection extends StatelessWidget {
       ),
       child: Column(
         children: [
+          SizedBox(height: 20,),
           const Text(
             'How To Book with us ?',
             style: TextStyle(
@@ -27,17 +28,21 @@ class HowBookingSection extends StatelessWidget {
             alignment: Alignment.center,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25),
-              child: Text(
-                textAlign: TextAlign.center,
-                "Just fill out the order form on the tour page, and then click the “Book This tour” button. Once you do this, we will send you a confirmation email that your reservation has been confirmed in accordance with the information you sent us. Or contact us by phone. +201099969068(viber, whatsapp, telegram)",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 15 ,
-                  fontWeight: FontWeight.w500,
-                )
-                ),
+              child: AutoSizeText(
+
+                 maxLines: 3,
+
+                  textAlign: TextAlign.center,
+                  "Just fill out the order form on the tour page, and then click the “Book This tour” button. Once you do this, we will send you a confirmation email that your reservation has been confirmed in accordance with the information you sent us. Or contact us by phone. +201099969068(viber, whatsapp, telegram)",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15 ,
+                    fontWeight: FontWeight.w500,
+                  )
+                  ),
+              ),
             ),
-            ),
+           
         ],
       ),
     );

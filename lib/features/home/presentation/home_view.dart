@@ -6,6 +6,7 @@ import 'package:tourist_website/features/home/presentation/widgets/most_popular_
 import 'package:tourist_website/features/home/presentation/widgets/svg_icon.dart';
 import 'package:tourist_website/features/home/presentation/widgets/type_tour_card.dart';
 import 'package:tourist_website/features/home/presentation/widgets/wow_booking_section.dart';
+import 'package:tourist_website/features/transportation_Booking/presentation/transporation_Booking_view.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -95,6 +96,15 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         actions: [
+          TextButton(
+            onPressed: (){
+              Navigator.pushNamed(context, TransporationBookingView.routeName);
+            },
+            child: const Text(
+              "Transportation",
+              style: TextStyle(fontSize: 20, color: Color(0xFF101518)),
+            ),
+          ),
           TextButton(
             onPressed: _scrollToFooter,
             child: const Text(

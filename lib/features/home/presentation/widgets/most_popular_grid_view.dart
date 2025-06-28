@@ -39,9 +39,9 @@ class CustomMostPopularGridView extends StatelessWidget {
 
   // Helper method to determine aspect ratio based on screen width
   double _getChildAspectRatio(double width) {
-    if (width > 1200) return 0.75;
-    if (width > 900) return 0.8;
-    if (width > 600) return 0.75;
+    if (width > 1200) return 1;
+    if (width > 900) return 0.89;
+    if (width > 600) return 1.2;
     return 1.4;
   }
 }
