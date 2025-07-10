@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tourist_website/features/home/presentation/home_view.dart';
 
 class UpArrow extends StatefulWidget {
   const UpArrow({super.key});
@@ -10,40 +11,39 @@ class UpArrow extends StatefulWidget {
 class _UpArrowState extends State<UpArrow> {
   bool isHover = false;
 
+  void scrollToTop() {
+    HomePage.globalScrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 600),
+      curve: Curves.easeInOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Positioned(
-          right: 20,
-          bottom: 20,
-          child: MouseRegion(
-            onEnter: (event) {
-              setState(() {
-                isHover = true;
-              });
-            },
-            onExit: (event) {
-              setState(() {
-                isHover = false;
-              });
-            },
-            child: AnimatedScale(
-              scale: isHover ? 1.02 : 1,
+    return Positioned(
+      right: 20,
+      bottom: 20,
+      child: MouseRegion(
+        onEnter: (_) => setState(() => isHover = true),
+        onExit: (_) => setState(() => isHover = false),
+        child: GestureDetector(
+          onTap: scrollToTop,
+          child: AnimatedScale(
+            scale: isHover ? 1.05 : 1,
+            duration: const Duration(milliseconds: 250),
+            child: AnimatedContainer(
               duration: const Duration(milliseconds: 250),
-              curve: Curves.easeInOut,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 250),
-                // padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.blue[700]!, Colors.blue[300]!],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  shape: BoxShape.circle,
-                  boxShadow: isHover
-                      ? [
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.blue[700]!, Colors.blue[300]!],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                shape: BoxShape.circle,
+                boxShadow:
+                    isHover
+                        ? [
                           BoxShadow(
                             color: Colors.blue.withOpacity(0.5),
                             spreadRadius: 5,
@@ -51,18 +51,18 @@ class _UpArrowState extends State<UpArrow> {
                             offset: const Offset(0, 0),
                           ),
                         ]
-                      : [],
-                ),
-                child: Icon(
-                  Icons.arrow_upward,
-                  size: 60,
-                  color: Colors.white,
-                ),
+                        : [],
+              ),
+              padding: const EdgeInsets.all(12),
+              child: const Icon(
+                Icons.arrow_upward,
+                size: 30,
+                color: Colors.white,
               ),
             ),
           ),
         ),
-      ],
+      ),
     );
   }
 }

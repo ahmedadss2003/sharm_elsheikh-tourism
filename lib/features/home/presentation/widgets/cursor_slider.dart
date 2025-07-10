@@ -1,5 +1,4 @@
-
-
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +7,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tourist_website/core/models/images_model.dart';
 
 class CustomCarouselSlider extends StatefulWidget {
-  const CustomCarouselSlider({
-    super.key,
-    required this.cities,
-  });
+  const CustomCarouselSlider({super.key, required this.cities});
 
   final List<ImagesModel> cities;
 
@@ -42,13 +38,15 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
                     CachedNetworkImage(
                       imageUrl: city.image,
                       fit: BoxFit.cover,
-                      placeholder: (context, url) =>  Center(
-                        child: LoadingAnimationWidget.staggeredDotsWave(
-                        color: Colors.purple,
-                        size: 100,
-                      ),
-                      ),
-                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                      placeholder:
+                          (context, url) => Center(
+                            child: LoadingAnimationWidget.staggeredDotsWave(
+                              color: Colors.purple,
+                              size: 100,
+                            ),
+                          ),
+                      errorWidget:
+                          (context, url, error) => const Icon(Icons.error),
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -63,6 +61,27 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
                         ),
                       ),
                     ),
+                    Positioned(
+                      bottom: 20,
+                      left: 16,
+                      right: 16,
+                      child: DefaultTextStyle(
+                        style: const TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        child: AnimatedTextKit(
+                          isRepeatingAnimation: false,
+                          animatedTexts: [
+                            TypewriterAnimatedText(
+                              "",
+                              speed: const Duration(milliseconds: 100),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -71,7 +90,7 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
           options: CarouselOptions(
             height: 320,
             autoPlay: true,
-            autoPlayInterval: const Duration(milliseconds: 2500),
+            autoPlayInterval: const Duration(milliseconds: 3500),
             enlargeCenterPage: true,
             viewportFraction: 1.0,
             onPageChanged: (index, reason) {
@@ -89,7 +108,7 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
             dotHeight: 6,
             dotWidth: 6,
             activeDotColor: Colors.blue,
-            dotColor:  Colors.black,
+            dotColor: Colors.black,
           ),
         ),
       ],

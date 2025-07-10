@@ -6,11 +6,11 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 class CustomDiscoverPLaceImageSection extends StatelessWidget {
   const CustomDiscoverPLaceImageSection({
     super.key,
-    required this.height,
+    required this.height, required this.categoryName,
   });
 
   final double height;
-
+  final String categoryName ;
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -36,7 +36,7 @@ class CustomDiscoverPLaceImageSection extends StatelessWidget {
               left: 0,
               right: 0,
               child: Center(
-                child: Text("Discover Places",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Colors.white),),
+                child: Text(categoryName,style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Colors.white),),
               )
             )
             ],

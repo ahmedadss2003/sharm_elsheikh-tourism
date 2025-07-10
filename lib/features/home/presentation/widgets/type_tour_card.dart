@@ -4,16 +4,14 @@ import 'package:tourist_website/features/discover_places_by_category/presentatio
 
 class TourCard extends StatefulWidget {
   final String category;
-  final String title;
   final String description;
   final String imageUrl;
-
+  final Color color;
   const TourCard({
     required this.category,
-    required this.title,
     required this.description,
     required this.imageUrl,
-    super.key,
+    super.key, required this.color,
   });
 
   @override
@@ -47,7 +45,21 @@ class _TourCardState extends State<TourCard> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            child: isMobile ? _buildMobileLayout() : _buildWebTabletLayout(isTablet),
+            child: GestureDetector(
+              onTap: (){
+                Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder:(context , animation , duration) =>DiscoverPlacesView(
+                        categoryName:widget.category ,
+                        color: widget.color,
+                      ) ,
+                      transitionsBuilder: (context , animation , secondaryAnimation , child) => FadeTransition(opacity: animation , child: child,),
+                      transitionDuration: Duration(milliseconds: 500),
+                    )
+                  );
+              },
+              child: isMobile ? _buildMobileLayout(widget.category) : _buildWebTabletLayout(isTablet , widget.category)) ,
           ),
             )
           ) ;
@@ -56,8 +68,7 @@ class _TourCardState extends State<TourCard> {
     );
   }
 
-  Widget _buildMobileLayout() {
-    // Vertical layout for mobile
+  Widget _buildMobileLayout(String categoryName ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -83,14 +94,7 @@ class _TourCardState extends State<TourCard> {
                 ),
               ),
               const SizedBox(height: 4),
-              Text(
-                widget.title,
-                style: const TextStyle(
-                  color: Color(0xFF101518),
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              
               const SizedBox(height: 8),
               Text(
                 widget.description,
@@ -109,7 +113,10 @@ class _TourCardState extends State<TourCard> {
                     Navigator.push(
                     context,
                     PageRouteBuilder(
-                      pageBuilder:(context , animation , duration) =>DiscoverPlacesView() ,
+                      pageBuilder:(context , animation , duration) =>DiscoverPlacesView(
+                        categoryName:categoryName ,
+                        color: widget.color,
+                      ) ,
                       transitionsBuilder: (context , animation , secondaryAnimation , child) => FadeTransition(opacity: animation , child: child,),
                       transitionDuration: Duration(milliseconds: 500),
                     )
@@ -117,8 +124,8 @@ class _TourCardState extends State<TourCard> {
 
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFEAEDF1),
-                    foregroundColor: const Color.fromARGB(255, 48, 56, 62),
+                    backgroundColor: const Color.fromARGB(255, 53, 89, 136),
+                    foregroundColor: const Color.fromARGB(255, 63, 73, 80),
                     overlayColor: const Color.fromARGB(255, 9, 83, 175),
                     shadowColor: Colors.black,
                     shape: RoundedRectangleBorder(
@@ -129,7 +136,7 @@ class _TourCardState extends State<TourCard> {
                       vertical: 8,
                     ),
                   ),
-                  child: const Text('View Details'),
+                  child: const Text('View Details' , style: TextStyle(color: Colors.white),),
                 ),
               ),
             ],
@@ -139,7 +146,7 @@ class _TourCardState extends State<TourCard> {
     );
   }
 
-  Widget _buildWebTabletLayout(bool isTablet) {
+  Widget _buildWebTabletLayout(bool isTablet , String categoryName) {
     // Horizontal layout for web and tablet
     return SizedBox(
       height: 300,
@@ -150,9 +157,11 @@ class _TourCardState extends State<TourCard> {
             child: ClipRRect(
               borderRadius: const BorderRadius.horizontal(left: Radius.circular(12)),
               child: CachedNetworkImage(
+                
                 imageUrl: widget.imageUrl,
                 fit: BoxFit.cover,
                 height: 300,
+
               ),
             ),
           ),
@@ -167,19 +176,13 @@ class _TourCardState extends State<TourCard> {
                   Text(
                     widget.category,
                     style: const TextStyle(
-                      color: Color(0xFF5C748A),
-                      fontSize: 16,
+                      color: Color.fromARGB(255, 5, 12, 19),
+                      fontSize: 28,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    widget.title,
-                    style: const TextStyle(
-                      color: Color(0xFF101518),
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+               
                   const SizedBox(height: 12),
                   Text(
                     widget.description,
@@ -196,7 +199,10 @@ class _TourCardState extends State<TourCard> {
                       Navigator.push(
                     context,
                     PageRouteBuilder(
-                      pageBuilder:(context , animation , duration) =>DiscoverPlacesView() ,
+                      pageBuilder:(context , animation , duration) =>DiscoverPlacesView(
+                        color: widget.color,
+                        categoryName: categoryName,
+                      ) ,
                       transitionsBuilder: (context , animation , secondaryAnimation , child) => FadeTransition(opacity: animation , child: child,),
                       transitionDuration: Duration(milliseconds: 500),
                     )

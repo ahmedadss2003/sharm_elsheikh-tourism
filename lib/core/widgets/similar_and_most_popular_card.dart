@@ -1,11 +1,13 @@
-
 import 'package:flutter/material.dart';
-import 'package:tourist_website/features/discover_places_by_category/presentation/widgets/place_details.dart';
+import 'package:tourist_website/core/models/tour_model.dart';
+import 'package:tourist_website/features/place_detials/presentation/views/place_details_view.dart';
 
-class SimilarAndMostPopularCard extends StatelessWidget {
-  const SimilarAndMostPopularCard({
+class BesSalleAndMostPopularCard extends StatelessWidget {
+  final TourModel tourModel;
+  const BesSalleAndMostPopularCard({
     super.key,
     required this.index,
+    required this.tourModel,
   });
 
   final int index;
@@ -47,91 +49,144 @@ class SimilarAndMostPopularCard extends StatelessWidget {
     ];
 
     return LayoutBuilder(
-      builder: (context , constrains){
+      builder: (context, constrains) {
         return GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, PlaceDetailsView.routeName) ;
+            print(tourModel.images[0].image);
+            Navigator.pushNamed(
+              context,
+              PlaceDetailsView.routeName,
+              arguments: tourModel,
+            );
           },
-          child: Container(
-            width: constrains.maxWidth,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: Offset(0, 3),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                width: constrains.maxWidth,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
-                      image: DecorationImage(
-                        image: NetworkImage(tourImages[index]),
-                        fit: BoxFit.cover,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(10),
+                          ),
+                          image: DecorationImage(
+                            image: NetworkImage(tourModel.images[0].image),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Padding(
-                    padding: EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Flexible(
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              tourTitles[index],
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
+                    Expanded(
+                      flex: 3,
+                      child: Padding(
+                        padding: EdgeInsets.all(12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Flexible(
+                              child: Text(
+                                tourModel.title,
+
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
                             ),
-                          ),
+                            SizedBox(height: 12),
+                            Row(
+                              children: List.generate(5, (index) {
+                                return Icon(
+                                  Icons.star,
+                                  color:
+                                      index < 4
+                                          ? Colors.amber
+                                          : Colors.grey[300],
+                                  size: 16,
+                                );
+                              }),
+                            ),
+                            SizedBox(height: 12),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 45, 154, 85),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 6.0,
+                                  right: 20,
+                                  top: 3,
+                                  bottom: 3,
+                                ),
+                                child: Text(
+                                  "\$${tourModel.priceAdult.toString()}",
+                                  style: TextStyle(
+                                    color: const Color.fromARGB(
+                                      255,
+                                      255,
+                                      255,
+                                      255,
+                                    ),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 10,)
-                        ,Row(
-                          children: List.generate(5, (index) {
-                            return Icon(
-                              Icons.star,
-                              color: index < 4 ? Colors.amber : Colors.grey[300],
-                              size: 16,
-                            );
-                          }
-                        ),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          'From \$${(50 + index * 25)}',
-                          style: TextStyle(
-                            color: Colors.blue[800],
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              // Positioned(
+              //   top: 10,
+              //   left: -20,
+              //   child: Transform.rotate(
+              //     angle: -0.785398,
+              //     child: Container(
+              //       width: 120,
+              //       padding: const EdgeInsets.symmetric(vertical: 4),
+              //       color: Colors.red[700],
+              //       child: Center(
+              //         child: Text(
+              //           "tourModel status",
+              //           style: TextStyle(
+              //             color: Colors.white,
+              //             fontWeight: FontWeight.bold,
+              //             fontSize: 12,
+              //             letterSpacing: 1,
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+            ],
           ),
         );
-      }
+      },
     );
   }
 }

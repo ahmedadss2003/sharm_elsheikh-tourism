@@ -13,7 +13,6 @@ class FooterSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Top Navigation Links
           Wrap(
             alignment: WrapAlignment.center,
             spacing: 32,
@@ -34,9 +33,18 @@ class FooterSection extends StatelessWidget {
             alignment: WrapAlignment.center,
             spacing: 24,
             children: [
-              SocialIcon(icon: Icons.facebook, url: 'https://www.facebook.com/SharmElSheikhTourism'),
-              SocialIcon(icon: Icons.alternate_email, url: 'https://twitter.com/SharmTourism'),
-              SocialIcon(icon: Icons.camera_alt, url: 'https://www.instagram.com/sharmelsheikhtourism'),
+              SocialIcon(
+                icon: Icons.facebook,
+                url: 'https://www.facebook.com/SharmElSheikhTourism',
+              ),
+              SocialIcon(
+                icon: Icons.alternate_email,
+                url: 'https://twitter.com/SharmTourism',
+              ),
+              SocialIcon(
+                icon: Icons.camera_alt,
+                url: 'https://www.instagram.com/sharmelsheikhtourism',
+              ),
             ],
           ),
 
@@ -45,10 +53,7 @@ class FooterSection extends StatelessWidget {
           // Bottom Text
           Text(
             '© 2025 Sharm El-Sheikh Tourism. All rights reserved.',
-            style: TextStyle(
-              color: Colors.grey.shade400,
-              fontSize: 14,
-            ),
+            style: TextStyle(color: Colors.grey.shade400, fontSize: 14),
             textAlign: TextAlign.center,
           ),
         ],

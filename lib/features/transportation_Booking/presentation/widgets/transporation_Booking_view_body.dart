@@ -1,22 +1,37 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:tourist_website/features/transportation_Booking/presentation/widgets/booking_upper_container_section.dart';
+import 'package:tourist_website/features/transportation_Booking/presentation/widgets/transportation_grid_view.dart';
+import 'package:tourist_website/features/transportation_Booking/presentation/widgets/transportation_subtittle.dart';
+import 'package:tourist_website/features/transportation_Booking/presentation/widgets/trasnportation_tittle.dart';
 
 class TransporationBookingViewBody extends StatelessWidget {
   const TransporationBookingViewBody({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          CachedNetworkImage(
-            imageUrl: "https://toyota.com.eg/storage/21952/142280_451797_HH1202-F.JPG",
-            height: 300, width: double.infinity, fit: BoxFit.cover,
-            placeholder: (context, url) =>  Center(
-              child: CircularProgressIndicator(),
-            )
-          ),
-        ],
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                CustomBookingContainer(),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: constraints.maxWidth < 700 ? 20 : 60,
+                  ),
+                  child: Column(
+                    children: [
+                      TransportationTittle(),
+                      SizedBox(height: 20),
+                      TransportationSubTittle(),
+                      TransportationGridView(width: constraints.maxWidth),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

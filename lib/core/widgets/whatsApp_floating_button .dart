@@ -12,23 +12,19 @@ class WhatsAppFloatingButton extends StatelessWidget {
       child: GestureDetector(
         onTap: () => _launchWhatsApp(),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
           decoration: BoxDecoration(
-            color: const Color(0xFF25D366), 
-            borderRadius: BorderRadius.circular(30),
+            color: const Color.fromARGB(255, 255, 255, 255),
+            shape: BoxShape.circle,
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
-            children:  [
-              Icon(Icons.whatshot, color: Colors.white),
-              SizedBox(width: 8),
-              Text(
-                'Contact us on WhatsApp',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              )
+            children: [
+              Image.asset(
+                "assets/images/whatsappicon.png",
+                width: 60,
+                height: 60,
+              ),
             ],
           ),
         ),

@@ -4,6 +4,7 @@ import 'package:tourist_website/core/helper_function/helper_function.dart';
 import 'package:tourist_website/core/widgets/up_arrow.dart';
 import 'package:tourist_website/core/widgets/whatsApp_floating_button%20.dart';
 import 'package:tourist_website/features/home/presentation/home_view.dart';
+
 void main() {
   runApp(const SharmElSheikhApp());
 }
@@ -28,12 +29,12 @@ class SharmElSheikhApp extends StatelessWidget {
       builder: (context, child) {
         return Scaffold(
           body: Stack(
-          children: [
-            child ?? const SizedBox.shrink(),
-            const WhatsAppFloatingButton(),
-            UpArrow(),
-          ],
-        ),
+            children: [
+              child ?? const SizedBox.shrink(),
+              const WhatsAppFloatingButton(),
+              UpArrow(),
+            ],
+          ),
         );
       },
       onGenerateRoute: onGenerateRoute,
@@ -41,9 +42,3 @@ class SharmElSheikhApp extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
