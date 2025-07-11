@@ -227,7 +227,12 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
                         widget.tourModel.timeOfTour.toString(),
                         widget.tourModel.images[0].image,
                       ),
-                      _buildMainContent(isMobile, isTablet, isDesktop),
+                      _buildMainContent(
+                        isMobile,
+                        isTablet,
+                        isDesktop,
+                        widget.tourModel.priceAdult.toString(),
+                      ),
                       SizedBox(height: 20),
                       Text(
                         "Similar and Most Popular Tours",
@@ -374,7 +379,12 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
     );
   }
 
-  Widget _buildMainContent(bool isMobile, bool isTablet, bool isDesktop) {
+  Widget _buildMainContent(
+    bool isMobile,
+    bool isTablet,
+    bool isDesktop,
+    String price,
+  ) {
     return Container(
       padding: EdgeInsets.all(isMobile ? 15 : 30),
       decoration: BoxDecoration(
@@ -391,14 +401,14 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
                 children: [
                   Expanded(flex: 2, child: _buildTourDetails()),
                   const SizedBox(width: 40),
-                  Expanded(flex: 1, child: _buildTourBookingForm()),
+                  Expanded(flex: 1, child: _buildTourBookingForm(price)),
                 ],
               )
               : Column(
                 children: [
                   _buildTourDetails(),
                   SizedBox(height: isMobile ? 20 : 30),
-                  _buildTourBookingForm(),
+                  _buildTourBookingForm(price),
                 ],
               ),
     );
@@ -763,7 +773,7 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
     );
   }
 
-  Widget _buildTourBookingForm() {
+  Widget _buildTourBookingForm(String price) {
     return SlideTransition(
       position: _slideAnimation,
       child: AnimatedContainer(
@@ -794,7 +804,7 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
               Row(
                 children: [
                   Text(
-                    '\$120 ',
+                    price,
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -842,30 +852,30 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
               ),
               const SizedBox(height: 20),
               CustomTextFormField(
-                hintText: 'Full Name',
+                hintText: 'John Doe',
                 icon: Icons.person,
-                label: "John Doe",
+                label: "Full Name",
                 controller: _fullNameController,
               ),
               const SizedBox(height: 15),
               CustomTextFormField(
-                hintText: 'Email Address',
+                hintText: 'john@example.com',
                 icon: Icons.email,
-                label: "john@example.com",
+                label: "Email Address",
                 controller: _emailController,
               ),
               const SizedBox(height: 15),
               CustomTextFormField(
-                hintText: 'WhatsApp Number',
+                hintText: '+201068561700',
                 icon: Icons.phone,
-                label: "+201068561700",
+                label: "WhatsApp Number",
                 controller: _phoneController,
               ),
               const SizedBox(height: 15),
               CustomTextFormField(
-                hintText: 'Hotel Name',
+                hintText: 'Hilton Waterfront',
                 icon: Icons.hotel,
-                label: "Hilton Waterfront",
+                label: "Hotel Name",
                 controller: _hotelController,
               ),
               const SizedBox(height: 15),

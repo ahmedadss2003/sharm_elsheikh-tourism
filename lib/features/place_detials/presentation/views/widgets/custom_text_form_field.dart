@@ -5,8 +5,7 @@ class CustomTextFormField extends StatelessWidget {
   final IconData icon;
   final String hintText;
   final int maxLines;
-
-  final TextEditingController? controller;
+  final TextEditingController? controller; // يبقى  بس ليه default لو مش موجود
 
   const CustomTextFormField({
     super.key,
@@ -32,6 +31,7 @@ class CustomTextFormField extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         TextFormField(
+          controller: controller ?? TextEditingController(),
           maxLines: maxLines,
           decoration: InputDecoration(
             prefixIcon: Icon(icon, color: Colors.blue[600], size: 16),
@@ -59,6 +59,9 @@ class CustomTextFormField extends StatelessWidget {
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter $label';
+            }
+            if (label == 'Email Address' && !value.contains('@')) {
+              return 'Please enter a valid email';
             }
             return null;
           },

@@ -56,11 +56,17 @@ class ApiService {
         data: bookingData,
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
-        print("Success");
+        print("Success: ${response.data}");
+      } else if (response.statusCode == 301 || response.statusCode == 302) {
+        print("Redirect detected to: ${response.headers['location']}");
+        throw Exception('Redirect error: Check backend configuration');
       } else {
-        throw Exception('Booking failed');
+        throw Exception(
+          'Booking failed with status ${response.statusCode}: ${response.data}',
+        );
       }
     } catch (e) {
+      print('Error: $e');
       throw Exception('There was an error, please Try later!: $e');
     }
   }
