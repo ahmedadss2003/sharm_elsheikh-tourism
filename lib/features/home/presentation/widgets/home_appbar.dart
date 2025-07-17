@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:tourist_website/features/home/presentation/widgets/contact_us.dart';
 import 'package:tourist_website/features/transportation_Booking/presentation/transporation_Booking_view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final GlobalKey footerKey;
   const CustomAppBar({super.key, required this.footerKey});
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight + 1);
+  Size get preferredSize => const Size.fromHeight(80);
 
   void _scrollToFooter(BuildContext context) {
     Scrollable.ensureVisible(
@@ -38,9 +39,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isMobile = MediaQuery.of(context).size.width < 600;
+    final bool isMobile = MediaQuery.of(context).size.width < 850;
 
     return AppBar(
+      toolbarHeight: 100,
       centerTitle: isMobile ? true : false,
       leading:
           isMobile
@@ -50,23 +52,37 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   Scaffold.of(context).openDrawer();
                 },
               )
-              : Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Image.asset(
-                  "assets/images/logo.png",
-                  width: 100,
-                  height: 100,
+              : Container(),
+      title:
+          isMobile
+              ? const Text(
+                'Sharm El-Sheikh Excursions',
+                style: TextStyle(
+                  color: Color(0xFF1a73e8),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
                 ),
+              )
+              : Row(
+                children: [
+                  Image.asset(
+                    "assets/images/logo.png",
+                    width: 200,
+                    height: 150,
+                    fit: BoxFit.cover,
+                  ),
+                  SizedBox(width: 10),
+                  const Text(
+                    'Sharm El-Sheikh Excursions',
+                    style: TextStyle(
+                      color: Color(0xFF1a73e8),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
               ),
-      title: const Text(
-        'Sharm El-Sheikh Tours',
-        style: TextStyle(
-          color: Color(0xFF101518),
-          fontWeight: FontWeight.bold,
-          fontSize: 18,
-        ),
-      ),
-      backgroundColor: const Color.fromARGB(255, 255, 200, 98),
+      backgroundColor: Color(0xfffedc07),
       elevation: 1,
       bottom: const PreferredSize(
         preferredSize: Size.fromHeight(1),
@@ -74,16 +90,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions:
           isMobile
-              ? []
+              ? [Image.asset("assets/images/logo.png", width: 100, height: 100)]
               : [
-                NavLink(
-                  text: 'Contact Us',
-                  onTap: () => _navigateToContactUs(context),
-                ),
-                NavLink(
-                  text: 'Transportation',
-                  onTap: () => _navigateToTransportation(context),
-                ),
+                NavLink(text: 'Contact Us', onTap: () => _launchWhatsApp()),
+                // NavLink(
+                //   text: 'Transportation',
+                //   onTap: () => _navigateToTransportation(context),
+                // ),
                 NavLink(
                   text: 'About Us',
                   onTap: () => _scrollToFooter(context),
@@ -91,6 +104,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 SizedBox(width: 16),
               ],
     );
+  }
+}
+
+void _launchWhatsApp() async {
+  final Uri whatsapp = Uri.parse("https://wa.me/+201062155477");
+  if (await canLaunchUrl(whatsapp)) {
+    await launchUrl(whatsapp);
+  } else {
+    debugPrint("Could not launch WhatsApp");
   }
 }
 
@@ -217,7 +239,7 @@ class CustomDrawer extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF0077B6), Color(0xFFF4A261)],
+            colors: [Color(0xFF007aff), Color.fromARGB(255, 251, 255, 0)],
           ),
         ),
         child: ListView(
@@ -259,14 +281,14 @@ class CustomDrawer extends StatelessWidget {
               context,
               icon: Icons.email_outlined,
               title: 'Contact Us',
-              onTap: () => _navigateToContactUs(context),
+              onTap: () => _launchWhatsApp(),
             ),
-            _buildDrawerItem(
-              context,
-              icon: Icons.directions_bus_filled_outlined,
-              title: 'Transportation',
-              onTap: () => _navigateToTransportation(context),
-            ),
+            // _buildDrawerItem(
+            //   context,
+            //   icon: Icons.directions_bus_filled_outlined,
+            //   title: 'Transportation',
+            //   onTap: () => _navigateToTransportation(context),
+            // ),
             _buildDrawerItem(
               context,
               icon: Icons.info_outline,

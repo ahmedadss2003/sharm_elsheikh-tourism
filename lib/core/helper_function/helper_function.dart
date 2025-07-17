@@ -23,8 +23,14 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
                 TransportBookingForm(transportationModel: transportationModel),
       );
     case DiscoverPlacesView.routeName:
+      final categoryName = settings.arguments as String;
+      final imageUrl = settings.arguments as String;
       return MaterialPageRoute(
-        builder: (_) => const DiscoverPlacesView(categoryName: "Historical"),
+        builder:
+            (_) => DiscoverPlacesView(
+              categoryName: categoryName,
+              imageUrl: imageUrl,
+            ),
       );
     case PlaceDetailsView.routeName:
       final tourModel = settings.arguments as TourModel;

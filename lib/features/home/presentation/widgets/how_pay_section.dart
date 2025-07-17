@@ -13,7 +13,7 @@ class HowPaySection extends StatelessWidget {
           style: TextStyle(
             fontSize: 36,
             fontWeight: FontWeight.w600,
-            color: Color(0xff33c449),
+            color: Color(0xff1a73e8),
           ),
         ),
         Padding(
@@ -26,7 +26,7 @@ class HowPaySection extends StatelessWidget {
             style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w500,
-              color: Color(0xff33c449),
+              color: Color(0xff1a73e8),
             ),
           ),
         ),

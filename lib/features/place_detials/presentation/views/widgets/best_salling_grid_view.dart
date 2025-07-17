@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourist_website/core/models/tour_model.dart';
-import 'package:tourist_website/core/widgets/similar_and_most_popular_card.dart';
-import 'package:tourist_website/features/home/presentation/cubit/get_best_saller_cubit.dart';
+import 'package:tourist_website/core/widgets/trip_card.dart';
+import 'package:tourist_website/features/home/presentation/manager/best_salle_cubit/get_best_saller_cubit.dart';
 import 'package:tourist_website/features/place_detials/presentation/manager/best_saller_cubit/best_salle_cubit.dart';
 
 class CustomBestSallerTourGridView extends StatelessWidget {
@@ -29,9 +29,9 @@ class CustomBestSallerTourGridView extends StatelessWidget {
                 ),
                 itemCount: tours.length,
                 itemBuilder: (context, index) {
-                  return BesSalleAndMostPopularCard(
-                    index: index,
+                  return TripCard(
                     tourModel: tours[index],
+                    width: constraints.maxWidth,
                   );
                 },
               );

@@ -1,14 +1,19 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
+import 'package:intl/intl.dart';
 import 'package:tourist_website/core/models/tour_model.dart';
+import 'package:tourist_website/features/home/presentation/widgets/youtube_section.dart';
 import 'package:tourist_website/features/place_detials/presentation/manager/booking_cubit/booking_cubit.dart';
 import 'package:tourist_website/features/place_detials/presentation/views/widgets/best_salling_grid_view.dart';
 import 'package:tourist_website/features/place_detials/presentation/views/widgets/custom_text_form_field.dart';
+import 'package:tourist_website/features/place_detials/presentation/views/widgets/show_image_button.dart';
 
 class PlaceDetailsViewBody extends StatefulWidget {
   const PlaceDetailsViewBody({super.key, required this.tourModel});
   final TourModel tourModel;
-
   @override
   PlaceDetailsViewBodyState createState() => PlaceDetailsViewBodyState();
 }
@@ -16,7 +21,6 @@ class PlaceDetailsViewBody extends StatefulWidget {
 class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
     with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
@@ -97,13 +101,14 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
   }
 
   void _showSuccessMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.green[600],
-        duration: const Duration(seconds: 3),
-      ),
-    );
+    AwesomeDialog(
+      context: context,
+      animType: AnimType.scale,
+      title: "Success",
+      desc: message,
+      dialogType: DialogType.success,
+      btnOkOnPress: () {},
+    ).show();
   }
 
   void _resetForm() {
@@ -120,6 +125,8 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
 
   void _showImages(BuildContext context) {
     int _currentPage = 0;
+    PageController _pageController = PageController();
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -129,54 +136,183 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
               final isDesktop = constraints.maxWidth >= 900;
               final width =
                   isDesktop ? constraints.maxWidth / 2 : constraints.maxWidth;
+
               return StatefulBuilder(
                 builder: (context, setState) {
+                  void _nextImage() {
+                    if (_currentPage < widget.tourModel.images.length - 1) {
+                      _pageController.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    }
+                  }
+
+                  void _previousImage() {
+                    if (_currentPage > 0) {
+                      _pageController.previousPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    }
+                  }
+
                   return SizedBox(
                     width: width,
                     height: isDesktop ? 400 : constraints.maxHeight * 0.7,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Expanded(
-                          child: PageView.builder(
-                            itemCount: widget.tourModel.images.length,
-                            onPageChanged: (index) {
-                              setState(() => _currentPage = index);
-                            },
-                            itemBuilder: (context, index) {
-                              return Image.network(
-                                widget.tourModel.images[index].image,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return const Center(
-                                    child: Icon(Icons.error, color: Colors.red),
-                                  );
-                                },
-                              );
-                            },
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: IconButton(
+                            icon: const Icon(Icons.close, size: 30),
+                            onPressed: () => Navigator.pop(context),
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(
-                            widget.tourModel.images.length,
-                            (index) => Container(
-                              margin: const EdgeInsets.all(4),
-                              width: 8,
-                              height: 8,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color:
-                                    _currentPage == index
-                                        ? Colors.blue
-                                        : Colors.grey,
+                        Expanded(
+                          child: Stack(
+                            children: [
+                              PageView.builder(
+                                controller: _pageController,
+                                itemCount: widget.tourModel.images.length,
+                                onPageChanged: (index) {
+                                  setState(() => _currentPage = index);
+                                },
+                                itemBuilder: (context, index) {
+                                  return ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Image.network(
+                                      widget.tourModel.images[index].image,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (
+                                        context,
+                                        error,
+                                        stackTrace,
+                                      ) {
+                                        return const Center(
+                                          child: Icon(
+                                            Icons.error,
+                                            color: Colors.red,
+                                            size: 50,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
+
+                              // Previous button
+                              if (_currentPage > 0)
+                                Positioned(
+                                  left: 10,
+                                  top: 0,
+                                  bottom: 0,
+                                  child: Center(
+                                    child: GestureDetector(
+                                      onTap: _previousImage,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.6),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        padding: const EdgeInsets.all(8),
+                                        child: const Icon(
+                                          Icons.arrow_back_ios,
+                                          color: Colors.white,
+                                          size: 24,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                              // Next button
+                              if (_currentPage <
+                                  widget.tourModel.images.length - 1)
+                                Positioned(
+                                  right: 10,
+                                  top: 0,
+                                  bottom: 0,
+                                  child: Center(
+                                    child: GestureDetector(
+                                      onTap: _nextImage,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.6),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        padding: const EdgeInsets.all(8),
+                                        child: const Icon(
+                                          Icons.arrow_forward_ios,
+                                          color: Colors.white,
+                                          size: 24,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                              // Image counter
+                              Positioned(
+                                top: 10,
+                                left: 10,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 6,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withOpacity(0.6),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Text(
+                                    "${_currentPage + 1} / ${widget.tourModel.images.length}",
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Page indicators
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: List.generate(
+                              widget.tourModel.images.length,
+                              (index) => GestureDetector(
+                                onTap: () {
+                                  _pageController.animateToPage(
+                                    index,
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.easeInOut,
+                                  );
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 4,
+                                  ),
+                                  width: _currentPage == index ? 12 : 8,
+                                  height: _currentPage == index ? 12 : 8,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color:
+                                        _currentPage == index
+                                            ? Colors.blue
+                                            : Colors.grey,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.close),
-                          onPressed: () => Navigator.pop(context),
                         ),
                       ],
                     ),
@@ -231,10 +367,15 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
                         isMobile,
                         isTablet,
                         isDesktop,
-                        widget.tourModel.priceAdult.toString(),
+                        (widget.tourModel.priceAdult -
+                                widget.tourModel.discount)
+                            .toString(),
                       ),
+
                       SizedBox(height: 20),
-                      Text(
+                      AutoSizeText(
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         "Similar and Most Popular Tours",
                         style: TextStyle(
                           fontSize: 24,
@@ -282,22 +423,27 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
       height: height,
       child: Stack(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(imageUrl),
-                fit: BoxFit.cover,
-              ),
-            ),
+          GestureDetector(
+            onTap: () {
+              _showImages(context);
+            },
             child: Container(
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.black.withOpacity(0.3),
-                    Colors.black.withOpacity(0.6),
-                  ],
+                image: DecorationImage(
+                  image: NetworkImage(imageUrl),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.black.withOpacity(0.3),
+                      Colors.black.withOpacity(0.6),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -336,16 +482,7 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
             left: 40,
             child: GestureDetector(
               onTap: () => _showImages(context),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 200, 161, 161),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Text("Show Images"),
-                ),
-              ),
+              child: HoverableShowImagesButton(),
             ),
           ),
         ],
@@ -414,6 +551,11 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
     );
   }
 
+  String extractYoutubeVideoId(String url) {
+    Uri uri = Uri.parse(url);
+    return uri.queryParameters['v'] ?? '';
+  }
+
   Widget _buildTourDetails() {
     return FadeTransition(
       opacity: _fadeAnimation,
@@ -430,26 +572,80 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
             ),
           ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildTourHeader(
-              widget.tourModel.title,
-              widget.tourModel.timeOfTour.toString(),
-              widget.tourModel.ageRequirement.toString(),
-              widget.tourModel.availability,
-              widget.tourModel.numberOfPeople.toString(),
-            ),
-            const SizedBox(height: 20),
-            _buildTourDescription(widget.tourModel.description),
-            const SizedBox(height: 20),
-            _buildTourInfo(
-              widget.tourModel.departureTime,
-              widget.tourModel.returnTime,
-            ),
-            const SizedBox(height: 20),
-            _buildIncludedSection(),
-          ],
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final isMobile = constraints.maxWidth < 600;
+            final isTablet =
+                constraints.maxWidth >= 600 && constraints.maxWidth < 900;
+            final videoHeight =
+                isMobile
+                    ? 200.0
+                    : isTablet
+                    ? 300.0
+                    : 400.0;
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildTourHeader(
+                  widget.tourModel.title,
+                  widget.tourModel.timeOfTour.toString(),
+                  widget.tourModel.ageRequirement.toString(),
+                  widget.tourModel.availability,
+                  widget.tourModel.numberOfPeople.toString(),
+                ),
+                const SizedBox(height: 20),
+                _buildTourDescription(widget.tourModel.description),
+                const SizedBox(height: 20),
+                _buildTourInfo(
+                  widget.tourModel.departureTime,
+                  widget.tourModel.returnTime,
+                ),
+                const SizedBox(height: 20),
+                _buildIncludedSection(),
+                const SizedBox(height: 20),
+                // Add YouTube Video Section
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: videoHeight,
+                        maxWidth: constraints.maxWidth,
+                      ),
+                      child:
+                          widget.tourModel.youtubeVideoUrl != null
+                              ? ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxHeight: videoHeight,
+                                    maxWidth: constraints.maxWidth,
+                                  ),
+                                  child: YoutubeVideoWidget(
+                                    videoId: extractYoutubeVideoId(
+                                      widget.tourModel.youtubeVideoUrl!,
+                                    ),
+                                  ), // Use dynamic videoId if available in TourModel
+                                ),
+                              )
+                              : SizedBox(),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -496,7 +692,7 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildStatItem(Icons.access_time, timeHour, 'Duration'),
-              _buildStatItem(Icons.groups, 'Age $tourAge', 'Minimum Age'),
+              _buildStatItem(Icons.groups, '$tourAge+', 'Minimum Age'),
               _buildStatItem(Icons.calendar_month, "All Year", 'Available'),
               _buildStatItem(Icons.people, maxGroup, 'Group Size'),
             ],
@@ -537,37 +733,65 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          decoration: BoxDecoration(
-            color: Colors.orange[100],
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: Colors.orange[300]!),
-          ),
-          child: Text(
-            'About This Tour',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: Colors.orange[800],
-            ),
-          ),
-        ),
         const SizedBox(height: 10),
-        Text(
-          description,
-          style: TextStyle(
-            fontSize: 14,
-            height: 1.5,
-            color: Colors.grey[800],
-            fontWeight: FontWeight.w500,
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: const Color(0xff1a73e8), width: 1.5),
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 14,
+                offset: Offset(0, 4),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(14),
+            child: ExpandedTile(
+              title: Text(
+                'Description',
+                style: TextStyle(
+                  color: Color(0xFF1a73e8),
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              content: Text(
+                description,
+                style: TextStyle(
+                  fontSize: 18,
+                  height: 1.5,
+                  color: Colors.grey[800],
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              controller: ExpandedTileController(),
+              leading: Icon(
+                Icons.description,
+                size: 24,
+                color: Color(0xFF1a73e8),
+              ),
+            ),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildTourInfo(String departureTime, String returnTime) {
+  String? formatHourAndMinute(String? timeString) {
+    if (timeString == null) return null;
+
+    try {
+      final parsedTime = DateFormat("HH:mm:ss").parse(timeString);
+
+      return DateFormat.jm().format(parsedTime);
+    } catch (e) {
+      return timeString;
+    }
+  }
+
+  Widget _buildTourInfo(String? departureTime, String? returnTime) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -584,13 +808,17 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
           const SizedBox(height: 15),
           _buildInfoRow(
             'Departure Time',
-            'Around $departureTime AM',
+            departureTime != null
+                ? 'Around ${formatHourAndMinute(departureTime)} '
+                : 'The trip will be determined with the tourist.',
             Icons.schedule,
           ),
           const SizedBox(height: 15),
           _buildInfoRow(
             'Return Time',
-            'Around $returnTime PM',
+            returnTime != null
+                ? 'Around ${formatHourAndMinute(returnTime)}'
+                : 'The trip will be determined with the tourist.',
             Icons.schedule_send,
           ),
         ],
@@ -639,33 +867,33 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
     return LayoutBuilder(
       builder: (context, constraints) {
         final isMobile = constraints.maxWidth < 600;
+        final includeList =
+            widget.tourModel.includes.isNotEmpty
+                ? widget.tourModel.includes
+                    .map((item) => item.serviceName)
+                    .toList()
+                : ['No items listed'];
 
+        final notIncludeList =
+            widget.tourModel.notIncludes.isNotEmpty
+                ? widget.tourModel.notIncludes
+                    .map((item) => item.serviceName)
+                    .toList()
+                : ['No items listed'];
         return isMobile
             ? Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _buildIncludedCard(
                   'Included',
-                  [
-                    'Professional diving instructor',
-                    'Snorkeling equipment',
-                    'Egyptian folklore show',
-                    'All entrance fees',
-                    'Bottled water',
-                  ],
+                  includeList,
                   Colors.green,
                   Icons.check_circle,
                 ),
                 const SizedBox(height: 15),
                 _buildIncludedCard(
                   'Not Included',
-                  [
-                    'Personal towels',
-                    'Underwater photography',
-                    'Gratuities (optional)',
-                    'Personal expenses',
-                    'Extra activities',
-                  ],
+                  notIncludeList,
                   Colors.red,
                   Icons.cancel,
                 ),
@@ -677,13 +905,7 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
                 Expanded(
                   child: _buildIncludedCard(
                     'Included',
-                    [
-                      'Professional diving instructor',
-                      'Snorkeling equipment',
-                      'Egyptian folklore show',
-                      'All entrance fees',
-                      'Bottled water',
-                    ],
+                    includeList,
                     Colors.green,
                     Icons.check_circle,
                   ),
@@ -692,13 +914,7 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
                 Expanded(
                   child: _buildIncludedCard(
                     'Not Included',
-                    [
-                      'Personal towels',
-                      'Underwater photography',
-                      'Gratuities (optional)',
-                      'Personal expenses',
-                      'Extra activities',
-                    ],
+                    notIncludeList,
                     Colors.red,
                     Icons.cancel,
                   ),
@@ -804,7 +1020,7 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
               Row(
                 children: [
                   Text(
-                    price,
+                    "$price £ ",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -897,7 +1113,7 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
                 padding: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Colors.blue[600]!, Colors.cyan[500]!],
+                    colors: [Color(0xFF1a73e8), Color(0xFF1a73e8)],
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -912,7 +1128,7 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
                           style: TextStyle(color: Colors.white70, fontSize: 12),
                         ),
                         Text(
-                          '\$${(adults * 120 + children * 60).toString()}',
+                          '£ ${(adults * (widget.tourModel.priceAdult - widget.tourModel.discount) + children * widget.tourModel.priceChild).toString()}',
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 20,
@@ -921,10 +1137,9 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
                         ),
                       ],
                     ),
-                    const Icon(
-                      Icons.attach_money,
-                      color: Colors.white,
-                      size: 24,
+                    Text(
+                      "£",
+                      style: TextStyle(color: Colors.white, fontSize: 22),
                     ),
                   ],
                 ),
@@ -935,7 +1150,7 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange[600],
+                    backgroundColor: Color(0xfffedc07),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -1024,65 +1239,6 @@ class PlaceDetailsViewBodyState extends State<PlaceDetailsViewBody>
       ),
     );
   }
-
-  // Widget _buildFormField(
-  //   String label,
-  //   IconData icon,
-  //   String hintText, {
-  //   int maxLines = 1,
-  //   TextEditingController? controller,
-  // }) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Text(
-  //         label,
-  //         style: TextStyle(
-  //           fontWeight: FontWeight.w600,
-  //           color: Colors.blue[900],
-  //           fontSize: 12,
-  //         ),
-  //       ),
-  //       const SizedBox(height: 6),
-  //       TextFormField(
-  //         controller: controller,
-  //         maxLines: maxLines,
-  //         decoration: InputDecoration(
-  //           prefixIcon: Icon(icon, color: Colors.blue[600], size: 16),
-  //           border: OutlineInputBorder(
-  //             borderRadius: BorderRadius.circular(10),
-  //             borderSide: BorderSide(color: Colors.blue[200]!),
-  //           ),
-  //           enabledBorder: OutlineInputBorder(
-  //             borderRadius: BorderRadius.circular(10),
-  //             borderSide: BorderSide(color: Colors.blue[200]!),
-  //           ),
-  //           focusedBorder: OutlineInputBorder(
-  //             borderRadius: BorderRadius.circular(10),
-  //             borderSide: BorderSide(color: Colors.blue[600]!, width: 2),
-  //           ),
-  //           hintText: hintText,
-  //           hintStyle: TextStyle(color: Colors.grey[500]),
-  //           contentPadding: const EdgeInsets.symmetric(
-  //             horizontal: 12,
-  //             vertical: 12,
-  //           ),
-  //           fillColor: Colors.white,
-  //           filled: true,
-  //         ),
-  //         validator: (value) {
-  //           if (value == null || value.isEmpty) {
-  //             return 'Please enter ${label.toLowerCase()}';
-  //           }
-  //           if (label == 'Email Address' && !value.contains('@')) {
-  //             return 'Please enter a valid email';
-  //           }
-  //           return null;
-  //         },
-  //       ),
-  //     ],
-  //   );
-  // }
 
   Widget _buildDateField() {
     return Column(

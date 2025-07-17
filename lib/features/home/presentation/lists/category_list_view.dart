@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tourist_website/features/home/presentation/widgets/type_tour_card.dart';
+import 'package:tourist_website/features/home/presentation/widgets/category_tour_card.dart';
 
 class CustomCategoryListView extends StatelessWidget {
-
-  const CustomCategoryListView({
-    super.key,
-    required this.tours, 
-  });
+  const CustomCategoryListView({super.key, required this.tours});
 
   final List<Map<String, dynamic>> tours;
 
@@ -18,7 +14,7 @@ class CustomCategoryListView extends StatelessWidget {
       itemCount: tours.length,
       itemBuilder: (context, index) {
         final tour = tours[index];
-        return TourCard(
+        return CategoryTourCard(
           color: tour["color"]!,
           category: tour['category']!,
           description: tour['description']!,

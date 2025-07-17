@@ -24,6 +24,7 @@ class TransporationBookingViewBody extends StatelessWidget {
                       TransportationTittle(),
                       SizedBox(height: 20),
                       TransportationSubTittle(),
+                      SizedBox(height: 20),
                       TransportationGridView(width: constraints.maxWidth),
                     ],
                   ),

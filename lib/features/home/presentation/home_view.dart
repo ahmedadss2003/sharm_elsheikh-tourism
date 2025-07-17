@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,7 +6,7 @@ import 'package:tourist_website/core/models/images_model.dart';
 import 'package:tourist_website/core/network/api_service.dart';
 import 'package:tourist_website/features/home/data/repos/all_tours_repository_impl.dart';
 import 'package:tourist_website/features/home/domain/usecases/get_all_tours_usecase.dart';
-import 'package:tourist_website/features/home/presentation/cubit/get_best_saller_cubit.dart';
+import 'package:tourist_website/features/home/presentation/manager/best_salle_cubit/get_best_saller_cubit.dart';
 import 'package:tourist_website/features/home/presentation/lists/category_list_view.dart';
 import 'package:tourist_website/features/home/presentation/widgets/cursor_slider.dart';
 import 'package:tourist_website/features/home/presentation/widgets/footer_section.dart';
@@ -14,6 +15,7 @@ import 'package:tourist_website/features/home/presentation/widgets/home_appbar.d
 import 'package:tourist_website/features/home/presentation/widgets/how_pay_section.dart';
 import 'package:tourist_website/features/home/presentation/widgets/most_popular_grid_view.dart';
 import 'package:tourist_website/features/home/presentation/widgets/wow_booking_section.dart';
+import 'package:tourist_website/features/place_detials/presentation/views/widgets/review_section.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -112,7 +114,7 @@ class _HomePageState extends State<HomePage> {
                                 CustomCategoryListView(tours: tours),
                                 const SizedBox(height: 20),
                                 const Text(
-                                  "Explore All Trips",
+                                  "Explore Your Favorite Trips",
                                   style: TextStyle(
                                     fontSize: 26,
                                     fontWeight: FontWeight.w600,
@@ -120,7 +122,9 @@ class _HomePageState extends State<HomePage> {
                                 ),
 
                                 const SizedBox(height: 8),
-                                const Text(
+                                const AutoSizeText(
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                   "Discover our most popular excursions",
                                   style: TextStyle(
                                     fontSize: 12,
@@ -141,6 +145,9 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(height: 20),
                     HowPaySection(width: constraints.maxWidth),
                     const SizedBox(height: 20),
+                    ReviewsSection(width: constraints.maxWidth),
+                    const SizedBox(height: 20),
+
                     KeyedSubtree(key: _footerKey, child: const FooterSection()),
                   ],
                 ),

@@ -18,11 +18,16 @@ class FooterSection extends StatelessWidget {
             spacing: 32,
             runSpacing: 12,
             children: [
-              FooterLink(text: 'About Us', url: '#'),
-              FooterLink(text: 'Contact', url: '#'),
-              FooterLink(text: 'Terms', url: '#'),
-              FooterLink(text: 'Privacy', url: '#'),
-              FooterLink(text: 'Language', url: '#'),
+              FooterLink(
+                text: 'About Us',
+                url:
+                    'https://www.instagram.com/sharmdesertsafari?igsh=MWIwYXF3MnIzeDdwcg%3D%3D&utm_source=qr',
+              ),
+              FooterLink(
+                text: 'Contact',
+                url:
+                    'https://www.facebook.com/profile.php?id=61575163371185&mibextid=wwXIfr&mibextid=wwXIfr',
+              ),
             ],
           ),
 
@@ -35,15 +40,13 @@ class FooterSection extends StatelessWidget {
             children: [
               SocialIcon(
                 icon: Icons.facebook,
-                url: 'https://www.facebook.com/SharmElSheikhTourism',
-              ),
-              SocialIcon(
-                icon: Icons.alternate_email,
-                url: 'https://twitter.com/SharmTourism',
+                url:
+                    'https://www.facebook.com/profile.php?id=61575163371185&mibextid=wwXIfr&mibextid=wwXIfr',
               ),
               SocialIcon(
                 icon: Icons.camera_alt,
-                url: 'https://www.instagram.com/sharmelsheikhtourism',
+                url:
+                    'https://www.instagram.com/sharmdesertsafari?igsh=MWIwYXF3MnIzeDdwcg%3D%3D&utm_source=qr',
               ),
             ],
           ),

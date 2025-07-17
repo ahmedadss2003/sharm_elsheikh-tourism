@@ -8,9 +8,11 @@ class DiscoverPlacesViewBody extends StatelessWidget {
     super.key,
     required this.categoryName,
     required this.color,
+    required this.imageUrl,
   });
   final String categoryName;
   final Color color;
+  final String imageUrl;
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
@@ -23,6 +25,7 @@ class DiscoverPlacesViewBody extends StatelessWidget {
             child: Column(
               children: [
                 CustomDiscoverPLaceImageSection(
+                  imageUrl: imageUrl,
                   height: height,
                   categoryName: categoryName,
                 ),
@@ -31,7 +34,7 @@ class DiscoverPlacesViewBody extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: CustomDiscoverPlacesGridView(
-                    categoryName: "Historical",
+                    categoryName: categoryName,
                   ),
                 ),
 

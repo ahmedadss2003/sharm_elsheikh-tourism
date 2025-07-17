@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourist_website/features/transportation_Booking/data/models/transportation_model.dart';
@@ -18,7 +19,6 @@ class TransportBookingScreenState extends State<TransportBookingForm> {
   final _phoneController = TextEditingController();
   final _numberOfPeopleController = TextEditingController();
   final _messageController = TextEditingController();
-  String? _interestedIn;
   DateTime? _departureDate;
   TimeOfDay? _departureTime;
 
@@ -85,13 +85,14 @@ class TransportBookingScreenState extends State<TransportBookingForm> {
                 child: BlocConsumer<TransportationBookingCubit, BookingState>(
                   listener: (context, state) {
                     if (state is BookingSuccess) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Booking successful!'),
-                          backgroundColor: Colors.green,
-                        ),
-                      );
-                      Navigator.pop(context);
+                      AwesomeDialog(
+                        context: context,
+                        animType: AnimType.scale,
+                        title: "Success",
+                        desc: "This Transportation Booking Successfully",
+                        dialogType: DialogType.success,
+                        btnOkOnPress: () {},
+                      ).show();
                     } else if (state is BookingFailure) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -111,7 +112,7 @@ class TransportBookingScreenState extends State<TransportBookingForm> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Starting at \$ ${widget.transportationModel.price} ',
+                                'Starting at £${widget.transportationModel.price} ',
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,

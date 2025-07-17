@@ -6,18 +6,19 @@ class TourModel {
   final int id;
   final String title;
   final String description;
-  final String? status; // Added status field
-  final int? timeOfTour;
+  final String? status;
+  final String? timeOfTour;
   final int? ageRequirement;
   final String availability;
   final int numberOfPeople;
-  final String departureTime;
-  final String returnTime;
+  final String? departureTime;
+  final String? returnTime;
   final int priceAdult;
   final int priceChild;
   final int discount;
   final String createdAt;
   final String updatedAt;
+  final String? youtubeVideoUrl;
   final List<ServiceItem> includes;
   final List<ServiceItem> notIncludes;
   final List<CategoryModel> categories;
@@ -27,7 +28,7 @@ class TourModel {
     required this.id,
     required this.title,
     required this.description,
-    this.status, // Added status parameter
+    this.status,
     this.timeOfTour,
     this.ageRequirement,
     required this.availability,
@@ -39,6 +40,7 @@ class TourModel {
     required this.discount,
     required this.createdAt,
     required this.updatedAt,
+    this.youtubeVideoUrl, // Added to constructor
     required this.includes,
     required this.notIncludes,
     required this.categories,
@@ -50,7 +52,7 @@ class TourModel {
       id: json['id'],
       title: json['title'],
       description: json['description'],
-      status: json['status'], // Added status parsing
+      status: json['status'],
       timeOfTour: json['time_of_tour'],
       ageRequirement: json['age_requirement'],
       availability: json['availability'],
@@ -62,6 +64,7 @@ class TourModel {
       discount: json['discount'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
+      youtubeVideoUrl: json['youtube_video_url'], // Added JSON parsing
       includes:
           json['includes'] != null
               ? List<ServiceItem>.from(
@@ -93,7 +96,7 @@ class TourModel {
     'id': id,
     'title': title,
     'description': description,
-    'status': status, // Added status to toJson
+    'status': status,
     'time_of_tour': timeOfTour,
     'age_requirement': ageRequirement,
     'availability': availability,
@@ -105,6 +108,7 @@ class TourModel {
     'discount': discount,
     'created_at': createdAt,
     'updated_at': updatedAt,
+    'youtube_video_url': youtubeVideoUrl, // Added to JSON serialization
     'includes': includes.map((x) => x.toJson()).toList(),
     'not_includes': notIncludes.map((x) => x.toJson()).toList(),
     'categories': categories.map((x) => x.toJson()).toList(),

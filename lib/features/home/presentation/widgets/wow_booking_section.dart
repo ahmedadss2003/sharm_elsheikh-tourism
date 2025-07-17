@@ -9,12 +9,13 @@ class HowBookingSection extends StatelessWidget {
     return Container(
       height: 200,
       width: double.infinity,
-      decoration: BoxDecoration(color: Color.fromARGB(255, 51, 184, 196)),
+      decoration: BoxDecoration(color: Color(0xff1a73e8)),
       child: Column(
         children: [
           SizedBox(height: 20),
-          const Text(
+          const AutoSizeText(
             'How To Book with us ?',
+            maxLines: 1,
             style: TextStyle(
               color: Colors.white,
               fontSize: 36,

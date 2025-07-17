@@ -8,10 +8,16 @@ import 'package:tourist_website/features/discover_places_by_category/presentatio
 import 'package:tourist_website/features/discover_places_by_category/presentation/widgets/discover_places_view_body.dart';
 
 class DiscoverPlacesView extends StatelessWidget {
-  const DiscoverPlacesView({super.key, required this.categoryName, this.color});
+  const DiscoverPlacesView({
+    super.key,
+    required this.categoryName,
+    this.color,
+    required this.imageUrl,
+  });
   static const routeName = "discover_places";
   final Color? color;
   final String categoryName;
+  final String imageUrl;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -20,8 +26,12 @@ class DiscoverPlacesView extends StatelessWidget {
             GetToursByCategoryUsecase(
               TourByCategoryRepoImpl(apiService: ApiService(Dio())),
             ),
-          )..getTourByCategory("Historical"),
-      child: DiscoverPlacesViewBody(categoryName: categoryName, color: color!),
+          )..getTourByCategory(categoryName),
+      child: DiscoverPlacesViewBody(
+        categoryName: categoryName,
+        color: color!,
+        imageUrl: imageUrl,
+      ),
     );
   }
 }

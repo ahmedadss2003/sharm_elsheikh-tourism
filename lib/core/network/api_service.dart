@@ -10,7 +10,6 @@ class ApiService {
   Future<List<TourModel>> getAllTours() async {
     final Response response = await dio.get("${baseUrl}tours");
     final dataList = response.data['data'];
-    print(dataList);
     if (dataList is List) {
       return List<TourModel>.from(
         dataList.map((x) {
@@ -56,9 +55,7 @@ class ApiService {
         data: bookingData,
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
-        print("Success: ${response.data}");
       } else if (response.statusCode == 301 || response.statusCode == 302) {
-        print("Redirect detected to: ${response.headers['location']}");
         throw Exception('Redirect error: Check backend configuration');
       } else {
         throw Exception(
@@ -66,7 +63,6 @@ class ApiService {
         );
       }
     } catch (e) {
-      print('Error: $e');
       throw Exception('There was an error, please Try later!: $e');
     }
   }

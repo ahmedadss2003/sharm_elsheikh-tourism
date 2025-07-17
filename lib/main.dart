@@ -16,7 +16,7 @@ class SharmElSheikhApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Sharm El-Sheikh Tourism',
+      title: 'On The beach Excursions',
       theme: ThemeData(
         primaryColor: const Color(0xFF101518),
         scaffoldBackgroundColor: const Color.fromARGB(255, 247, 247, 247),
